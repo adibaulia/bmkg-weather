@@ -44,7 +44,6 @@ type (
 		Domain      string            `json:"domain"`
 		Tags        string            `json:"tags"`
 		NameLang    []NameLang        `json:"name_lang"`
-		Parameter   []Parameter       `json:"parameter"`
 		Province    location.Province `json:"province"`
 	}
 

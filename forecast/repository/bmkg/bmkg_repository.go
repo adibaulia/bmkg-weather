@@ -25,7 +25,7 @@ func (b *BMKGForecast) GetByProvince(province location.Province) (*BMKGForecast,
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= http.StatusBadRequest {
-		return nil, errormessage.ErrBadParamInput
+		return nil, errormessage.ErrNotFound
 	}
 	if resp.StatusCode >= http.StatusInternalServerError {
 		return nil, errormessage.ErrInternalServerError

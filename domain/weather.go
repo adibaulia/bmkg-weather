@@ -1,13 +1,15 @@
 package domain
 
 import (
-	"time"
+	"log"
+	"strconv"
 )
 
 type (
 	WeatherForecast struct {
 		Location                 Location                   `json:"location"`
-		LastUpdated              time.Time                  `json:"last_updated"`
+		LastUpdatedApi           LastUpdatedTimeFormatter   `json:"last_updated_api"`
+		LastUpdatedAccess        LastUpdatedTimeFormatter   `json:"last_updated_access"`
 		WeatherForecastTimeRange []WeatherForecastTimeRange `json:"weather_forecast_time_range"`
 	}
 
@@ -19,15 +21,16 @@ type (
 	}
 
 	Weather struct {
-		NameID string `json:"name_id"`
-		NameEN string `json:"name_en"`
-		Code   int    `json:"code"`
+		NameID      string      `json:"name_id"`
+		NameEN      string      `json:"name_en"`
+		WeatherCode WeatherCode `json:"weather_code"`
 	}
 
 	WeatherCode int
 
 	WeatherUseCase interface {
-		GetWeather(Location) (Weather, error)
+		GetWeatherByProvince(string) ([]WeatherForecast, error)
+		GetWeatherByCity(string, string) (WeatherForecast, error)
 	}
 )
 
@@ -67,10 +70,24 @@ var (
 	}
 )
 
-func getWeatherName(wheaterCode WeatherCode, lang string) string {
+func GetWeatherCode(weatherCodeStr string) WeatherCode {
+	weatherCodeInt, err := strconv.Atoi(weatherCodeStr)
+	if err != nil {
+		log.Printf("error converting weather code int: %v", err)
+		return 500
+	}
+	for weatherCode := range weatherCodeNameMap {
+		if weatherCodeInt == int(weatherCode) {
+			return weatherCode
+		}
+	}
+	return 500
+}
+
+func GetWeatherName(weatherCode WeatherCode, lang string) string {
 	langIndex := 0
 	if lang == "en" {
 		langIndex = 1
 	}
-	return weatherCodeNameMap[wheaterCode][langIndex]
+	return weatherCodeNameMap[weatherCode][langIndex]
 }
