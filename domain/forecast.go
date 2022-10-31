@@ -2,10 +2,11 @@ package domain
 
 import (
 	"github.com/adibaulia/bmkg-weather/domain/location"
+	"github.com/adibaulia/bmkg-weather/forecast/repository/bmkg"
 )
 
 type ForecastRepository interface {
-	GetByProvince(location.Province) (*Forecast, error)
+	GetByProvince(location.Province) (*bmkg.BMKGForecast, error)
 }
 
 type (
@@ -32,18 +33,18 @@ type (
 	}
 
 	Location struct {
-		ID          string      `json:"id"`
-		Latitude    string      `json:"latitude"`
-		Longitude   string      `json:"longitude"`
-		Coordinate  string      `json:"coordinate"`
-		Type        string      `json:"type"`
-		Region      string      `json:"region"`
-		Level       string      `json:"level"`
-		Description string      `json:"description"`
-		Domain      string      `json:"domain"`
-		Tags        string      `json:"tags"`
-		NameLang    []NameLang  `json:"name_lang"`
-		Parameter   []Parameter `json:"parameter"`
+		ID          string            `json:"id"`
+		Latitude    string            `json:"latitude"`
+		Longitude   string            `json:"longitude"`
+		Coordinate  string            `json:"coordinate"`
+		Type        string            `json:"type"`
+		Region      string            `json:"region"`
+		Level       string            `json:"level"`
+		Description string            `json:"description"`
+		Domain      string            `json:"domain"`
+		Tags        string            `json:"tags"`
+		NameLang    []NameLang        `json:"name_lang"`
+		Province    location.Province `json:"province"`
 	}
 
 	NameLang struct {

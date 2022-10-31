@@ -33,11 +33,8 @@ type (
 				Description string `xml:"description,attr"`
 				Domain      string `xml:"domain,attr"`
 				Tags        string `xml:"tags,attr"`
-				Name        []struct {
-					Text string `xml:",chardata"`
-					Lang string `xml:"lang,attr"`
-				} `xml:"name"`
-				Parameter []struct {
+				Name        []Name `xml:"name"`
+				Parameter   []struct {
 					Text        string `xml:",chardata"`
 					ID          string `xml:"id,attr"`
 					Description string `xml:"description,attr"`
@@ -56,5 +53,10 @@ type (
 				} `xml:"parameter"`
 			} `xml:"area"`
 		} `xml:"forecast"`
+	}
+
+	Name struct {
+		Text string `xml:",chardata"`
+		Lang string `xml:"lang,attr"`
 	}
 )
