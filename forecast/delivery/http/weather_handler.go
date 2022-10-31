@@ -19,6 +19,7 @@ type response struct {
 
 func NewWeatherHandler(r *gin.Engine, us domain.WeatherUseCase) {
 	handler := &weatherHandler{us}
+	r.SetTrustedProxies(nil)
 	r.GET("/weather/:province", handler.GetWeatherByProvince)
 	r.GET("/weather/:province/:city", handler.GetWeatherByCity)
 

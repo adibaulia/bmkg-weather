@@ -6,9 +6,15 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/adibaulia/bmkg-weather/domain/errormessage"
 	"github.com/adibaulia/bmkg-weather/domain/location"
+)
+
+const (
+	BMKGAPI   = "https://data.bmkg.go.id/DataMKG/MEWS/DigitalForecast/DigitalForecast-%v.xml"
+	userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36"
 )
 
 func NewBMKGClient() *BMKGForecast {
@@ -16,8 +22,20 @@ func NewBMKGClient() *BMKGForecast {
 }
 
 func (b *BMKGForecast) GetByProvince(province location.Province) (*BMKGForecast, error) {
-	url := fmt.Sprintf("https://data.bmkg.go.id/DataMKG/MEWS/DigitalForecast/DigitalForecast-%v.xml", province)
-	resp, err := http.Get(url)
+	b = &BMKGForecast{}
+	url := fmt.Sprintf(BMKGAPI, province)
+	log.Printf("Get BMKG Data from URL: %s, with province: %v", url, province)
+
+	c := http.Client{Timeout: 1 * time.Second}
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		log.Printf("error when creating client HTTP BMKG API: %v", err)
+		return nil, err
+	}
+	req.Header.Add("User-Agent", userAgent)
+	req.Header.Add("Accept", "*/*")
+
+	resp, err := c.Do(req)
 	if err != nil {
 		log.Printf("error when getting BMKG API: %v", err)
 		return nil, err
