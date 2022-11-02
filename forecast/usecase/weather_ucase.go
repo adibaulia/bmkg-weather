@@ -54,11 +54,11 @@ func (u *weatherUseCase) GetWeatherByProvince(provinceStr string) ([]domain.Weat
 		return nil, err
 	}
 
-	result := []domain.WeatherForecast{}
+	var result []domain.WeatherForecast
 
 	for _, l := range BMKGForecast.Forecast.Area {
 		weatherPerLocation := domain.WeatherForecast{
-			Location: domain.Location{
+			Location: location.Location{
 				ID:          l.ID,
 				Latitude:    l.Latitude,
 				Longitude:   l.Longitude,
@@ -76,7 +76,7 @@ func (u *weatherUseCase) GetWeatherByProvince(provinceStr string) ([]domain.Weat
 			LastUpdatedAccess: domain.LastUpdatedTimeFormatter(now.In(loc)),
 		}
 
-		weatherForecasts := []domain.WeatherForecastTimeRange{}
+		var weatherForecasts []domain.WeatherForecastTimeRange
 		for _, p := range l.Parameter {
 			if p.ID == "weather" {
 				for _, tr := range p.Timerange {
@@ -109,10 +109,10 @@ func (u *weatherUseCase) GetWeatherByProvince(provinceStr string) ([]domain.Weat
 	return result, nil
 }
 
-func nameLangCompose(nameLang []bmkg.Name) []domain.NameLang {
-	result := []domain.NameLang{}
+func nameLangCompose(nameLang []bmkg.Name) []location.NameLang {
+	var result []location.NameLang
 	for _, v := range nameLang {
-		result = append(result, domain.NameLang{
+		result = append(result, location.NameLang{
 			Name: v.Text,
 			Lang: v.Lang,
 		})

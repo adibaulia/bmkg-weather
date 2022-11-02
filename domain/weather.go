@@ -3,11 +3,13 @@ package domain
 import (
 	"log"
 	"strconv"
+
+	"github.com/adibaulia/bmkg-weather/domain/location"
 )
 
 type (
 	WeatherForecast struct {
-		Location                 Location                   `json:"location"`
+		Location                 location.Location          `json:"location"`
 		LastUpdatedApi           LastUpdatedTimeFormatter   `json:"last_updated_api"`
 		LastUpdatedAccess        LastUpdatedTimeFormatter   `json:"last_updated_access"`
 		WeatherForecastTimeRange []WeatherForecastTimeRange `json:"weather_forecast_time_range"`

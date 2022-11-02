@@ -12,10 +12,13 @@ import (
 func main() {
 	r := gin.New()
 
-	weatherRepo := bmkg.NewBMKGClient()
-	weatherUseCase := usecase.NewWeatherUseCase(weatherRepo)
+	forecastRepo := bmkg.NewBMKGClient()
+	weatherUseCase := usecase.NewWeatherUseCase(forecastRepo)
 
 	http.NewWeatherHandler(r, weatherUseCase)
+
+	temperatureUseCase := usecase.NewTemperatureUseCase(forecastRepo)
+	http.NewTemperatureHandler(r, temperatureUseCase)
 
 	r.Run(fmt.Sprintf(":%v", 8899))
 }
